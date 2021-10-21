@@ -4,7 +4,7 @@ import 'dart:convert';
 import 'package:flutter/services.dart';
 
 class PrintBluetoothThermal {
-  static const MethodChannel _channel = const MethodChannel('groons.web.app/print');
+  static const MethodChannel _channel = MethodChannel('groons.web.app/print');
 
   ///returns true if bluetooth is on
   static Future<bool> get bluetoothEnabled async {
@@ -18,8 +18,8 @@ class PrintBluetoothThermal {
     return bluetoothState;
   }
 
-  ///retronates all paired bluetooth on the device
-  static Future<List<BluetoothInfo>> get pairedBluetooths async {
+  ///resonates all paired bluetooth on the device
+  static Future<List<BluetoothInfo>> get pairedBluetooth async {
     List<BluetoothInfo> items = [];
     try {
       final List result = await _channel.invokeMethod('pairedbluetooths');
@@ -28,10 +28,10 @@ class PrintBluetoothThermal {
         List<String> info = item.split("#");
         String name = info[0];
         String mac = info[1];
-        items.add(BluetoothInfo(name: name, macAdress: mac));
+        items.add(BluetoothInfo(name: name, macAddress: mac));
       });
     } on PlatformException catch (e) {
-      print("Fail paired Bluetooths: '${e.message}'.");
+      print("Fail paired Bluetooth: '${e.message}'.");
     }
 
     return items;
@@ -78,8 +78,6 @@ class PrintBluetoothThermal {
   static Future<bool> writeString({required PrintTextSize printText}) async {
     ///EN: you must send the enter \n to print the complete phrase, it is not sent automatically because you may want to add several
     /// horizontal values ​​of different size
-    ///ES: se debe enviar el enter \n para que imprima la frase completa, no se envia automatico por que tal vez quiera agregar varios
-    ///valores horizontales de diferente tamaño
     int size = printText.size <= 5 ? printText.size : 2;
     String text = printText.text;
 
@@ -89,7 +87,7 @@ class PrintBluetoothThermal {
       final bool result = await _channel.invokeMethod('printstring', textFinal);
       return result;
     } on PlatformException catch (e) {
-      print("Failed to printsext: '${e.message}'.");
+      print("Failed to print text: '${e.message}'.");
       return false;
     }
   }
@@ -117,7 +115,6 @@ class PrintBluetoothThermal {
     bool status = false;
     try {
       status = await _channel.invokeMethod('disconnect');
-      //print("llego: $result");
     } on PlatformException catch (e) {
       print("Failed to disconnect: '${e.message}'.");
     }
@@ -128,34 +125,34 @@ class PrintBluetoothThermal {
 
 class BluetoothInfo {
   String name;
-  String macAdress;
+  String macAddress;
 
   BluetoothInfo({
     required this.name,
-    required this.macAdress,
+    required this.macAddress,
   });
 
   BluetoothInfo copyWith({
     String? name,
-    String? macAdress,
+    String? macAddress,
   }) {
     return BluetoothInfo(
       name: name ?? this.name,
-      macAdress: macAdress ?? this.macAdress,
+      macAddress: macAddress ?? this.macAddress,
     );
   }
 
   Map<String, dynamic> toMap() {
     return {
       'name': name,
-      'macAdress': macAdress,
+      'macAddress': macAddress,
     };
   }
 
   factory BluetoothInfo.fromMap(Map<String, dynamic> map) {
     return BluetoothInfo(
       name: map['name'],
-      macAdress: map['macAdress'],
+      macAddress: map['macAddress'],
     );
   }
 
@@ -164,17 +161,7 @@ class BluetoothInfo {
   factory BluetoothInfo.fromJson(String source) => BluetoothInfo.fromMap(json.decode(source));
 
   @override
-  String toString() => 'BluetoothInfo(name: $name, macAdress: $macAdress)';
-
-  @override
-  bool operator ==(Object other) {
-    if (identical(this, other)) return true;
-
-    return other is BluetoothInfo && other.name == name && other.macAdress == macAdress;
-  }
-
-  @override
-  int get hashCode => super.hashCode;
+  String toString() => 'BluetoothInfo(name: $name, macAddress: $macAddress)';
 }
 
 class PrintTextSize {
