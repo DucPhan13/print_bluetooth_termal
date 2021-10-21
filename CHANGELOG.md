@@ -1,3 +1,12 @@
+## [1.0.2]
+
+Added a method to disconnect the printer
+
+## [1.0.1]
+
+Shareability with null security was added and all methods were changed to English.
+if you want to migrate to this version you must read the README.md file
+
 ## [1.0.0]
 
 Shareability with null security was added and all methods were changed to English.

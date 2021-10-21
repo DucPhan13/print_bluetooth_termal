@@ -83,7 +83,7 @@ class PrintBluetoothThermalPlugin: FlutterPlugin, MethodCallHandler{
       }
     } else if (call.method == "connect") {
       var macimpresora = call.arguments.toString();
-       //Log.d(TAG, "coneccting kt: mac: "+macimpresora)
+       //Log.d(TAG, "coneccting kt: mac: "+macimpresora);
       if(macimpresora.length>0){
         mac = macimpresora;
       }else{
@@ -92,7 +92,7 @@ class PrintBluetoothThermalPlugin: FlutterPlugin, MethodCallHandler{
       GlobalScope.launch(Dispatchers.Main) {
         if(outputStream == null) {
           outputStream = connect()?.also {
-            Log.d(TAG, "conectado kt")
+            //Log.d(TAG, "connected kt")
             //result.success("true")
             //Toast.makeText(this@MainActivity, "Impresora conectada", Toast.LENGTH_SHORT).show()
           }.apply {
@@ -101,6 +101,7 @@ class PrintBluetoothThermalPlugin: FlutterPlugin, MethodCallHandler{
           }
         }else{
           Log.d(TAG, "stream null kt: ")
+          outputStream == null;
           result.success(false)
         }
       }
@@ -140,7 +141,7 @@ class PrintBluetoothThermalPlugin: FlutterPlugin, MethodCallHandler{
           var size:Int = 0
           var texto:String = ""
           var linea = stringllego.split("///")
-          Log.d(TAG, "lista llego: ${linea.size}")
+          //Log.d(TAG, "lista llego: ${linea.size}")
           if(linea.size>1) {
             size = linea[0].toInt()
             texto = linea[1]
@@ -177,6 +178,14 @@ class PrintBluetoothThermalPlugin: FlutterPlugin, MethodCallHandler{
 
       result.success(lista)
 
+    }else if(call.method == "disconnect"){
+      if(outputStream != null){
+        outputStream?.close()
+        outputStream = null
+        result.success(true);
+      }else{
+        result.success(true);
+      }
     }else {
       result.notImplemented()
     }
@@ -226,10 +235,14 @@ class PrintBluetoothThermalPlugin: FlutterPlugin, MethodCallHandler{
         }
       }else{
         state = false
-        Log.d(TAG, "Priblema adapter: ")
+        Log.d(TAG, "Problema adapter: ")
       }
       outputStream
     }
+  }
+
+  private fun disconncet(){
+    outputStream?.close()
   }
 
   private fun dispositivosVinculados():List<String>{
