@@ -8,11 +8,9 @@ class PrintBluetoothThermal {
 
   ///Check if it is allowed on Android 12 access to Bluetooth onwards
   static Future<bool> get isPermissionBluetoothGranted async {
-    //bluetooth esta disponible?
     bool bluetoothState = false;
     try {
       bluetoothState = await _channel.invokeMethod('ispermissionbluetoothgranted');
-      //print("llego: $bluetoothState");
     } on PlatformException catch (e) {
       print("Fallo Bluetooth status: '${e.message}'.");
     }
@@ -20,7 +18,7 @@ class PrintBluetoothThermal {
     return bluetoothState;
   }
 
-  ///returns true if bluetooth is on
+  ///Return true if bluetooth is on
   static Future<bool> get bluetoothEnabled async {
     bool bluetoothState = false;
     try {
@@ -32,9 +30,8 @@ class PrintBluetoothThermal {
     return bluetoothState;
   }
 
-  ///retronates all paired bluetooth on the device
+  ///Retrieve all paired bluetooth on the device
   static Future<List<BluetoothInfo>> get pairedBluetooths async {
-    //bluetooth vinculados
     List<BluetoothInfo> items = [];
     try {
       final List result = await _channel.invokeMethod('pairedbluetooths');
@@ -52,7 +49,7 @@ class PrintBluetoothThermal {
     return items;
   }
 
-  ///returns true if you are currently connected to the printer
+  ///Return true if you are currently connected to the printer
   static Future<bool> get connectionStatus async {
     try {
       final bool result = await _channel.invokeMethod('connectionstatus');
@@ -63,7 +60,7 @@ class PrintBluetoothThermal {
     }
   }
 
-  ///send connection to ticket printer and wait true if it was successful, the mac address of the printer's bluetooth must be sent
+  ///Send connection to ticket printer and wait true if it was successful, the mac address of the printer's bluetooth must be sent
   static Future<bool> connect({required String macPrinterAddress}) async {
     bool result = false;
 
@@ -78,7 +75,7 @@ class PrintBluetoothThermal {
     return result;
   }
 
-  ///send bytes to print, esc_pos_utils_plus package must be used, returns true if successful
+  ///Send bytes to print, esc_pos_utils_plus package must be used, returns true if successful
   static Future<bool> writeBytes(List<int> bytes) async {
     try {
       final bool result = await _channel.invokeMethod('writebytes', bytes);
@@ -107,13 +104,13 @@ class PrintBluetoothThermal {
     }
   }
 
-  ///gets the android version where it is running, returns String
+  ///Get the android version where it is running, returns String
   static Future<String> get platformVersion async {
     final String version = await _channel.invokeMethod('getPlatformVersion');
     return version;
   }
 
-  ///get the percentage of the battery returns int
+  ///Get the percentage of the battery returns int
   static Future<int> get batteryLevel async {
     int result = 0;
 
@@ -125,7 +122,7 @@ class PrintBluetoothThermal {
     return result;
   }
 
-  ///disconnect print
+  ///Disconnect print
   static Future<bool> get disconnect async {
     bool status = false;
     try {
