@@ -6,6 +6,20 @@ import 'package:flutter/services.dart';
 class PrintBluetoothThermal {
   static const MethodChannel _channel = MethodChannel('groons.web.app/print');
 
+  ///Check if it is allowed on Android 12 access to Bluetooth onwards
+  static Future<bool> get isPermissionBluetoothGranted async {
+    //bluetooth esta disponible?
+    bool bluetoothState = false;
+    try {
+      bluetoothState = await _channel.invokeMethod('ispermissionbluetoothgranted');
+      //print("llego: $bluetoothState");
+    } on PlatformException catch (e) {
+      print("Fallo Bluetooth status: '${e.message}'.");
+    }
+
+    return bluetoothState;
+  }
+
   ///returns true if bluetooth is on
   static Future<bool> get bluetoothEnabled async {
     bool bluetoothState = false;
@@ -18,8 +32,9 @@ class PrintBluetoothThermal {
     return bluetoothState;
   }
 
-  ///resonates all paired bluetooth on the device
-  static Future<List<BluetoothInfo>> get pairedBluetooth async {
+  ///retronates all paired bluetooth on the device
+  static Future<List<BluetoothInfo>> get pairedBluetooths async {
+    //bluetooth vinculados
     List<BluetoothInfo> items = [];
     try {
       final List result = await _channel.invokeMethod('pairedbluetooths');

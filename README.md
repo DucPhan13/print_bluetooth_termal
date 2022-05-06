@@ -30,6 +30,7 @@ PrintBluetoothThermal
 
 | Comando | Descripción |
 | --- | --- |
+| PrintBluetoothThermal.isPermissionBluetoothGranted | returns true if the BLUETOOTH_CONNECT permission is enabled, it is only required from android 12 onwards |
 | PrintBluetoothThermal.bluetoothEnabled | returns true if bluetooth is on |
 | PrintBluetoothThermal.pairedBluetooths | retronates all paired bluetooth on the device |
 | PrintBluetoothThermal.connectionStatus | returns true if you are currently connected to the printer |
